@@ -22,8 +22,8 @@ export const AuthLayout = () => {
           />
           <h1>Notion Clone</h1>
         </Box>
+        <Outlet />
       </Container>
-      <Outlet />
     </div>
   );
 };
