@@ -1,19 +1,23 @@
 import { Box, TextField, ButtonBase } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import authApi from "../api/authApi";
 
 const Register = () => {
   const [usernameErrText, setUserNameErrText] = useState("");
   const [passwordErrText, setPasswordErrText] = useState("");
   const [confirmPasswordErrText, setConfirmPasswordErrText] = useState("");
+  // const [userExistsErrText, setUserExistsErrText] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUserNameErrText("");
     setPasswordErrText("");
     setConfirmPasswordErrText("");
+    // setUserExistsErrText("");
 
     // Get data
     const data = new FormData(e.target);
@@ -54,39 +58,56 @@ const Register = () => {
       error = true;
       setConfirmPasswordErrText("You need to confirm your password");
     }
+    // if () {
+    //   error = true;
+    //   setUserExistsErrText("User already exists");
+    // }
     if (error) return;
+
+    // Loading Button
+    setLoading(true);
 
     // API register new account
     try {
-      console.log("test1: connecting...");
+      console.log("connecting...");
       // register()に渡すParamはauthApiのページから来ている
       const res = await authApi.register({
         username,
         password,
         confirmPassword,
       });
-      console.log("test2:waiting...");
       localStorage.setItem("token", res.token);
+      setLoading(false);
       // res.tokenは　server　>　user.js　>　register で設定したres.tokenのこと
       console.log("New account registered!");
+      navigate("/");
     } catch (err) {
-      console.log(err);
-      err.forEach((e) => {
-        if (e.param === "username") {
-          setUserNameErrText(e.msg);
+      const errors = err.data.errors;
+      console.log(errors);
+      errors.forEach((err) => {
+        if (err.param === "username") {
+          setUserNameErrText(err.msg);
         }
-        if (e.param === "password") {
-          setPasswordErrText(e.msg);
+        if (err.param === "password") {
+          setPasswordErrText(err.msg);
         }
-        if (e.param === "confirmPassword") {
-          setConfirmPasswordErrText(e.msg);
+        if (err.param === "confirmPassword") {
+          setConfirmPasswordErrText(err.msg);
         }
+        // if ((err.param !== "username", "password", "confirmPassword")) {
+        //   setUserExistsErrText(err.msg);
+        // }
       });
+      setLoading(false);
     }
   };
   return (
     <>
-      <Box component="form" onSubmit={handleSubmit}>
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        // hints={userExistsErrText}
+      >
         <TextField
           fullWidth
           id="username"
@@ -96,7 +117,8 @@ const Register = () => {
           type="username"
           required
           error={usernameErrText !== ""}
-          helperText={usernameErrText}
+          hints={usernameErrText}
+          disabled={loading}
         />
         <TextField
           fullWidth
@@ -107,7 +129,8 @@ const Register = () => {
           type="password"
           required
           error={passwordErrText !== ""}
-          helperText={passwordErrText}
+          hints={passwordErrText}
+          disabled={loading}
         />
         <TextField
           fullWidth
@@ -118,14 +141,15 @@ const Register = () => {
           type="confirmPassword"
           required
           error={confirmPasswordErrText !== ""}
-          helperText={confirmPasswordErrText}
+          hints={confirmPasswordErrText}
+          disabled={loading}
         />
         <LoadingButton
           sx={{ mt: 3, mb: 2 }}
           fullWidth
           type="submit"
           variant="outlined"
-          loading={false}
+          loading={loading}
         >
           Sign In
         </LoadingButton>
