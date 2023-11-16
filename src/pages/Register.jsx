@@ -58,10 +58,6 @@ const Register = () => {
       error = true;
       setConfirmPasswordErrText("You need to confirm your password");
     }
-    // if () {
-    //   error = true;
-    //   setUserExistsErrText("User already exists");
-    // }
     if (error) return;
 
     // Loading Button
@@ -69,30 +65,31 @@ const Register = () => {
 
     // API register new account
     try {
-      console.log("connecting...");
+      console.log("processing to register...");
       // register()に渡すParamはauthApiのページから来ている
       const res = await authApi.register({
         username,
         password,
         confirmPassword,
       });
-      localStorage.setItem("token", res.token);
       setLoading(false);
+      localStorage.setItem("token", res.token);
       // res.tokenは　server　>　user.js　>　register で設定したres.tokenのこと
       console.log("New account registered!");
       navigate("/");
     } catch (err) {
+      console.log(err);
       const errors = err.data.errors;
       console.log(errors);
-      errors.forEach((err) => {
-        if (err.param === "username") {
-          setUserNameErrText(err.msg);
+      errors.forEach((e) => {
+        if (e.param === "username") {
+          setUserNameErrText(e.msg);
         }
-        if (err.param === "password") {
-          setPasswordErrText(err.msg);
+        if (e.param === "password") {
+          setPasswordErrText(e.msg);
         }
-        if (err.param === "confirmPassword") {
-          setConfirmPasswordErrText(err.msg);
+        if (e.param === "confirmPassword") {
+          setConfirmPasswordErrText(e.msg);
         }
         // if ((err.param !== "username", "password", "confirmPassword")) {
         //   setUserExistsErrText(err.msg);
@@ -117,7 +114,7 @@ const Register = () => {
           type="username"
           required
           error={usernameErrText !== ""}
-          hints={usernameErrText}
+          helperText={usernameErrText}
           disabled={loading}
         />
         <TextField
@@ -129,7 +126,7 @@ const Register = () => {
           type="password"
           required
           error={passwordErrText !== ""}
-          hints={passwordErrText}
+          helperText={passwordErrText}
           disabled={loading}
         />
         <TextField
@@ -141,7 +138,7 @@ const Register = () => {
           type="confirmPassword"
           required
           error={confirmPasswordErrText !== ""}
-          hints={confirmPasswordErrText}
+          helperText={confirmPasswordErrText}
           disabled={loading}
         />
         <LoadingButton
@@ -151,11 +148,11 @@ const Register = () => {
           variant="outlined"
           loading={loading}
         >
-          Sign In
+          Sign Up
         </LoadingButton>
       </Box>
       <ButtonBase component={Link} to="/login">
-        *Already have an account
+        *Already have an account? Log in
       </ButtonBase>
     </>
   );
