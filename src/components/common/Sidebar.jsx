@@ -88,6 +88,25 @@ export const Sidebar = () => {
               </IconButton>
             </Box>
           </ListItemButton>
+          <Box sx={{ paddingTop: "10px" }} />
+
+          <ListItemButton>
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography variant="body2" fontWeight="700">
+                Memo
+              </Typography>
+              <IconButton>
+                {/* <AddBoxOutlinedIcon fontSize="small" /> */}
+              </IconButton>
+            </Box>
+          </ListItemButton>
         </List>
       </Drawer>
     </div>
