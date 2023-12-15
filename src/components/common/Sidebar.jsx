@@ -6,19 +6,40 @@ import {
   ListItemButton,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import assets from "../../assets/images/index";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import memoApi from "../../api/memoApi";
+import { setMemo } from "../../redux/features/memoSlice";
+
 export const Sidebar = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.value);
+  const dispatch = useDispatch();
+  const memos = useSelector((state) => state.memo.value);
+
   const logout = () => {
     localStorage.removeItem("token");
     navigate("/login");
   };
+
+  useEffect(() => {
+    const getMemos = async () => {
+      try {
+        const res = await memoApi.getAll();
+        // console.log(res);
+        dispatch(setMemo(res));
+        // console.log(memos);
+      } catch (err) {
+        alert(err);
+      }
+    };
+    getMemos();
+  }, [dispatch]);
+
   return (
     <div>
       <Drawer
@@ -51,9 +72,7 @@ export const Sidebar = () => {
               </IconButton>
             </Box>
           </ListItemButton>
-
           <Box sx={{ paddingTop: "10px" }} />
-
           <ListItemButton>
             <Box
               sx={{
@@ -68,9 +87,7 @@ export const Sidebar = () => {
               </Typography>
             </Box>
           </ListItemButton>
-
           <Box sx={{ paddingTop: "10px" }} />
-
           <ListItemButton>
             <Box
               sx={{
@@ -89,24 +106,22 @@ export const Sidebar = () => {
             </Box>
           </ListItemButton>
           <Box sx={{ paddingTop: "10px" }} />
-
-          <ListItemButton>
-            <Box
-              sx={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography variant="body2" fontWeight="700">
-                Memo
-              </Typography>
-              <IconButton>
-                {/* <AddBoxOutlinedIcon fontSize="small" /> */}
-              </IconButton>
-            </Box>
-          </ListItemButton>
+          {memos.map((item, index) => (
+            <ListItemButton>
+              <Box
+                sx={{ pl: "20px" }}
+                component={Link}
+                to={`/memo/${item._id}`}
+                key={item._id}
+              >
+                <Typography variant="body2" fontWeight="700">
+                  {item.icon}
+                  {item.title}
+                </Typography>
+                <IconButton></IconButton>
+              </Box>
+            </ListItemButton>
+          ))}
         </List>
       </Drawer>
     </div>
