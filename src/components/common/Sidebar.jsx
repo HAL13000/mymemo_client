@@ -6,19 +6,21 @@ import {
   ListItemButton,
   Typography,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import assets from "../../assets/images/index";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import memoApi from "../../api/memoApi";
 import { setMemo } from "../../redux/features/memoSlice";
 
 export const Sidebar = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
+  const { memoId } = useParams();
   const memos = useSelector((state) => state.memo.value);
 
   const logout = () => {
@@ -39,6 +41,11 @@ export const Sidebar = () => {
     };
     getMemos();
   }, [dispatch]);
+
+  useEffect(() => {
+    const activeIndex = memos.findIndex((e) => e._id === memoId);
+    setActiveIndex(activeIndex);
+  }, [navigate]);
 
   return (
     <div>
@@ -113,8 +120,9 @@ export const Sidebar = () => {
                 component={Link}
                 to={`/memo/${item._id}`}
                 key={item._id}
+                selected={index === activeIndex}
               >
-                <Typography variant="body2" fontWeight="700">
+                <Typography>
                   {item.icon}
                   {item.title}
                 </Typography>
