@@ -56,6 +56,7 @@ export const Sidebar = () => {
         sx={{ width: 250, height: "100vh" }}
       >
         <List
+          disablePadding
           sx={{
             width: 250,
             height: "100vh",
@@ -74,8 +75,8 @@ export const Sidebar = () => {
               <Typography variant="body2" fontWeight="700">
                 {user.username}
               </Typography>
-              <IconButton>
-                <LogoutOutlinedIcon onClick={logout} />
+              <IconButton onClick={logout}>
+                <LogoutOutlinedIcon fontSize="small" />
               </IconButton>
             </Box>
           </ListItemButton>
@@ -114,15 +115,29 @@ export const Sidebar = () => {
           </ListItemButton>
           <Box sx={{ paddingTop: "10px" }} />
           {memos.map((item, index) => (
-            <ListItemButton>
+            <ListItemButton
+              sx={{ pl: "20px" }}
+              component={Link}
+              to={`/memo/${item._id}`}
+              key={item._id}
+              selected={index === activeIndex}
+            >
               <Box
-                sx={{ pl: "20px" }}
-                component={Link}
-                to={`/memo/${item._id}`}
-                key={item._id}
-                selected={index === activeIndex}
+              // sx={{ pl: "20px" }}
+              // component={Link}
+              // to={`/memo/${item._id}`}
+              // key={item._id}
+              // selected={index === activeIndex}
               >
-                <Typography>
+                <Typography
+                  variant="body2"
+                  fontWeight="700"
+                  sx={{
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
                   {item.icon}
                   {item.title}
                 </Typography>
