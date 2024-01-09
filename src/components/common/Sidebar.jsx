@@ -32,9 +32,7 @@ export const Sidebar = () => {
     const getMemos = async () => {
       try {
         const res = await memoApi.getAll();
-        // console.log(res);
         dispatch(setMemo(res));
-        // console.log(memos);
       } catch (err) {
         alert(err);
       }
@@ -43,9 +41,11 @@ export const Sidebar = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    const activeIndex = memos.findIndex((e) => e._id === memoId);
+    const activeIndex = memos.findIndex((e) => e.id === memoId);
+    // if (memos.length > 0 && memoId === undefined) {
+    // }
     setActiveIndex(activeIndex);
-  }, [navigate]);
+  }, [memos, memoId, navigate]);
 
   return (
     <div>
@@ -114,6 +114,7 @@ export const Sidebar = () => {
             </Box>
           </ListItemButton>
           <Box sx={{ paddingTop: "10px" }} />
+
           {memos.map((item, index) => (
             <ListItemButton
               sx={{ pl: "20px" }}

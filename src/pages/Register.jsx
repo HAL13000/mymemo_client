@@ -17,16 +17,12 @@ const Register = () => {
     setUserNameErrText("");
     setPasswordErrText("");
     setConfirmPasswordErrText("");
-    // setUserExistsErrText("");
 
     // Get data
     const data = new FormData(e.target);
     const username = data.get("username").trim();
     const password = data.get("password").trim();
     const confirmPassword = data.get("confirmPassword").trim();
-    // console.log(username);
-    // console.log(password);
-    // console.log(confirmPassword);
 
     // Errors
     let error = false;
