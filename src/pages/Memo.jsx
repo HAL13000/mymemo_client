@@ -4,11 +4,15 @@ import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import { useParams } from "react-router-dom";
 import memoApi from "../api/memoApi";
+import { useDispatch, useSelector } from "react-redux";
+import { setMemo } from "../redux/features/memoSlice";
 
 export const Memo = () => {
   const { memoId } = useParams();
-  const [title, setTitle] = useState();
-  const [description, setDescription] = useState();
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const dispatch = useDispatch();
+  const memos = useSelector((state) => state.memo.value);
 
   // useStateでメモの状態を更新する　Const updateMemo もいる
 
@@ -31,11 +35,12 @@ export const Memo = () => {
 
   const updateTitle = async (e) => {
     clearTimeout(timer);
+    const newTitle = e.target.value;
+    setTitle(newTitle);
+    let temp = [...memos];
+    dispatch(setMemo(temp));
 
     timer = setTimeout(async () => {
-      const newTitle = e.target.value;
-      setTitle(newTitle);
-
       try {
         await memoApi.update(memoId, { title: newTitle });
       } catch (err) {
