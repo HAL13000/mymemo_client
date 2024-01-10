@@ -6,11 +6,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import memoApi from "../api/memoApi";
 import { useDispatch, useSelector } from "react-redux";
 import { setMemo } from "../redux/features/memoSlice";
+import EmojiPicker from "../components/common/EmojiPicker";
 
 export const Memo = () => {
   const { memoId } = useParams();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [icon, setIcon] = useState("");
   const dispatch = useDispatch();
   const memos = useSelector((state) => state.memo.value);
   const Navigate = useNavigate();
@@ -24,6 +26,7 @@ export const Memo = () => {
         // console.log(res);
         setTitle(res.title);
         setDescription(res.description);
+        setIcon(res.icon);
       } catch (err) {
         alert(err);
       }
@@ -39,6 +42,8 @@ export const Memo = () => {
     const newTitle = e.target.value;
     setTitle(newTitle);
     let temp = [...memos];
+    const index = temp.findIndex((e) => e._id === memoId);
+    temp[index] = { ...temp[index], title: newTitle };
     dispatch(setMemo(temp));
 
     timer = setTimeout(async () => {
@@ -53,8 +58,6 @@ export const Memo = () => {
     clearTimeout(timer);
     const newDescription = e.target.value;
     setDescription(newDescription);
-    // let temp = [...memos];
-    // dispatch(setMemo(temp));
 
     timer = setTimeout(async () => {
       try {
@@ -67,14 +70,15 @@ export const Memo = () => {
 
   const deleteMemo = async (e) => {
     try {
-      await memoApi.delete(memoId);
+      const deletedMemo = await memoApi.delete(memoId);
+      console.log(deletedMemo);
+
+      const newMemos = memos.filter((e) => e._id !== memoId);
       if (newMemos.length === 0) {
-        Navigate("/");
+        Navigate("/memo");
       } else {
         Navigate(`/memo/${newMemos[0]._id}`);
       }
-
-      const newMemos = memos.filter((e) => e._id !== memoId);
       dispatch(setMemo(newMemos));
     } catch (err) {
       alert(err);
@@ -100,35 +104,38 @@ export const Memo = () => {
         <Typography></Typography>
       </Box>
       <Box sx={{ padding: "10px 50px" }}>
-        <TextField
-          onChange={updateTitle}
-          value={title}
-          placeholder="Theme"
-          variant="outlined"
-          fullWidth
-          sx={{
-            ".MuiInputBase-input": { padding: 0 },
-            ".MuiOutlinedInput-notchedOutline": { border: "none" },
-            ".MuiOutlinedInput-root": {
-              fontSize: "2rem",
-              fontWeight: "700",
-            },
-          }}
-        />
-        <TextField
-          onChange={updateDescription}
-          value={description}
-          placeholder="Add"
-          variant="outlined"
-          fullWidth
-          sx={{
-            ".MuiInputBase-input": { padding: 0 },
-            ".MuiOutlinedInput-notchedOutline": { border: "none" },
-            ".MuiOutlinedInput-root": {
-              fontSize: "1rem",
-            },
-          }}
-        />
+        <Box>
+          <EmojiPicker icon={icon} />
+          <TextField
+            onChange={updateTitle}
+            value={title}
+            placeholder="Theme"
+            variant="outlined"
+            fullWidth
+            sx={{
+              ".MuiInputBase-input": { padding: 0 },
+              ".MuiOutlinedInput-notchedOutline": { border: "none" },
+              ".MuiOutlinedInput-root": {
+                fontSize: "2rem",
+                fontWeight: "700",
+              },
+            }}
+          />
+          <TextField
+            onChange={updateDescription}
+            value={description}
+            placeholder="Add"
+            variant="outlined"
+            fullWidth
+            sx={{
+              ".MuiInputBase-input": { padding: 0 },
+              ".MuiOutlinedInput-notchedOutline": { border: "none" },
+              ".MuiOutlinedInput-root": {
+                fontSize: "1rem",
+              },
+            }}
+          />
+        </Box>
       </Box>
     </>
   );
