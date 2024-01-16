@@ -17,9 +17,12 @@ const EmojiPicker = (props) => {
     let codesArray = [];
     emojiCode.forEach((el) => codesArray.push("0x" + el));
     const emoji = String.fromCodePoint(...codesArray);
-    console.log(emoji);
+
+    // console.log(emoji);
+    props.onChange(emoji);
     setIsShowPicker(false);
   };
+
   return (
     <div>
       <Box sx={{ position: "relative", width: "max-content" }}>
