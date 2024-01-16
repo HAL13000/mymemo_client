@@ -6,6 +6,21 @@ const EmojiPicker = (props) => {
   useEffect(() => {
     setSelectedEmoji(props.icon);
   }, [props.icon]);
+<<<<<<< Updated upstream
+=======
+
+  const showPicker = () => setIsShowPicker(!isShowPicker);
+  const selectEmoji = (e) => {
+    // console.log(e);
+    const emojiCode = e.unified.split("-");
+    let codesArray = [];
+    emojiCode.forEach((el) => codesArray.push("0x" + el));
+    const emoji = String.fromCodePoint(...codesArray);
+    // console.log(emoji);
+    props.onChange(emoji);
+    setIsShowPicker(false);
+  };
+>>>>>>> Stashed changes
   return (
     <div>
       <Box>
