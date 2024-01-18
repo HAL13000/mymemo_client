@@ -14,6 +14,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import memoApi from "../../api/memoApi";
 import { setMemo } from "../../redux/features/memoSlice";
+import FavoriteList from "./FavoriteList";
 
 export const Sidebar = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -93,7 +94,8 @@ export const Sidebar = () => {
             </Box>
           </ListItemButton>
           <Box sx={{ paddingTop: "10px" }} />
-          <ListItemButton>
+          <FavoriteList />
+          {/* <ListItemButton>
             <Box
               sx={{
                 width: "100%",
@@ -106,7 +108,7 @@ export const Sidebar = () => {
                 Favorite
               </Typography>
             </Box>
-          </ListItemButton>
+          </ListItemButton> */}
           <Box sx={{ paddingTop: "10px" }} />
           <ListItemButton>
             <Box
@@ -126,7 +128,6 @@ export const Sidebar = () => {
             </Box>
           </ListItemButton>
           <Box sx={{ paddingTop: "10px" }} />
-
           {memos.map((item, index) => (
             <ListItemButton
               sx={{ pl: "20px" }}
