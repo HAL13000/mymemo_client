@@ -1,15 +1,17 @@
-import React, { useEffect } from "react";
-import { ListItemButton, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { ListItemButton, Typography, Box } from "@mui/material";
 import { DragDropContext } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import memoApi from "../../api/memoApi";
+import { setFavoriteList } from "../../redux/features/favoriteSlice";
 
 const FavoriteList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const memos = useSelector((state) => state.favorites.value);
   const { memoId } = useParams();
+  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
     const getMemos = async () => {
@@ -24,7 +26,8 @@ const FavoriteList = () => {
   }, []);
 
   useEffect(() => {
-    // const
+    const index = memos.findIndex((e) => e._id === memoId);
+    setActiveIndex(index);
   }, [memoId]);
 
   return (
@@ -44,7 +47,24 @@ const FavoriteList = () => {
         </Box>
       </ListItemButton>
 
-      <DragDropContext></DragDropContext>
+      <ListItemButton
+        sx={{
+          pl: "20px",
+          cursor: "",
+        }}
+      >
+        <Typography
+          variant="body2"
+          fontWeight="700"
+          sx={{
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+        >
+          Favorite
+        </Typography>
+      </ListItemButton>
     </div>
   );
 };

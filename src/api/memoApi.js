@@ -9,6 +9,7 @@ const memoApi = {
   getOne: (id) => axiosClient.get(`memo/${id}`),
   update: (id, params) => axiosClient.put(`memo/${id}`, params),
   delete: (id) => axiosClient.delete(`memo/${id}`),
+  getFavorites: () => axiosClient.get("memo/favorites"),
   // ここのParamsは状態を更新した時TitleなのかDescriptionなのか伝えるため。第二引数に更新したい情報を渡す。
 };
 
