@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { Box, IconButton, TextField, Typography } from "@mui/material";
 import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
+import StarIcon from "@mui/icons-material/Star";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import { useNavigate, useParams } from "react-router-dom";
 import memoApi from "../api/memoApi";
 import { useDispatch, useSelector } from "react-redux";
 import { setMemo } from "../redux/features/memoSlice";
 import EmojiPicker from "../components/common/EmojiPicker";
+import { setFavoriteList } from "../redux/features/favoriteSlice";
 
 export const Memo = () => {
   const { memoId } = useParams();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [isFavorite, setIsFavorite] = useState(false);
   const [icon, setIcon] = useState("");
   const dispatch = useDispatch();
   const memos = useSelector((state) => state.memo.value);
+  const favoriteMemos = useSelector((state) => state.favorites.value);
   const Navigate = useNavigate();
 
   // useStateでメモの状態を更新する　Const updateMemo もいる
@@ -73,6 +77,11 @@ export const Memo = () => {
       const deletedMemo = await memoApi.delete(memoId);
       console.log(deletedMemo);
 
+      if (isFavorite) {
+        const newFavoriteMemos = favoriteMemos.filter((e) => e._id !== memoId);
+        dispatch(setFavoriteList(newFavoriteMemos));
+      }
+
       const newMemos = memos.filter((e) => e._id !== memoId);
       if (newMemos.length === 0) {
         Navigate("/memo");
@@ -101,6 +110,24 @@ export const Memo = () => {
     }
   };
 
+  const addFavorite = async () => {
+    try {
+      const memo = await memoApi.update(memoId, { favorite: !isFavorite });
+      let newFavoriteMemos = [...favoriteMemos];
+      if (isFavorite) {
+        const newFavoriteMemos = newFavoriteMemos.filter(
+          (e) => e.id !== memoId
+        );
+      } else {
+        newFavoriteMemos.unshift(memo);
+      }
+      dispatch(setFavoriteList(newFavoriteMemos));
+      setIsFavorite(!isFavorite);
+    } catch (err) {
+      alert(err);
+    }
+  };
+
   return (
     <>
       <Box
@@ -110,8 +137,12 @@ export const Memo = () => {
           width: "100%",
         }}
       >
-        <IconButton>
-          <StarBorderOutlinedIcon />
+        <IconButton onClick={addFavorite} variant="outlined">
+          {isFavorite ? (
+            <StarIcon color="warning" />
+          ) : (
+            <StarBorderOutlinedIcon />
+          )}
         </IconButton>
         <IconButton variant="outlined" color="error" onClick={deleteMemo}>
           <DeleteOutlinedIcon />
