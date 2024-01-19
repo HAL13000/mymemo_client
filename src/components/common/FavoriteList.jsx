@@ -17,7 +17,8 @@ const FavoriteList = () => {
     const getMemos = async () => {
       try {
         const res = await memoApi.getFavorites();
-        dispatch(setFavoriteList(res));
+        console.log("favorite list", res);
+        // dispatch(setFavoriteList(res));
       } catch (err) {
         alert(err);
       }
@@ -27,6 +28,7 @@ const FavoriteList = () => {
 
   useEffect(() => {
     const index = memos.findIndex((e) => e._id === memoId);
+    console.log("favoriteList", memos);
     setActiveIndex(index);
   }, [memoId]);
 
@@ -46,25 +48,28 @@ const FavoriteList = () => {
           </Typography>
         </Box>
       </ListItemButton>
-
-      <ListItemButton
-        sx={{
-          pl: "20px",
-          cursor: "",
-        }}
-      >
-        <Typography
-          variant="body2"
-          fontWeight="700"
+      {memos.map((item, index) => (
+        <ListItemButton
+          to={`/memo/${item._id}`}
           sx={{
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
+            pl: "20px",
+            cursor: "",
           }}
         >
-          Favorite
-        </Typography>
-      </ListItemButton>
+          <Typography
+            variant="body2"
+            fontWeight="700"
+            sx={{
+              whiteSpace: "nowrap",
+              //   overflow: "hidden",
+              //   textOverflow: "ellipsis",
+            }}
+          >
+            {item.icon}
+            {item.title}
+          </Typography>
+        </ListItemButton>
+      ))}
     </div>
   );
 };
