@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setMemo } from "../redux/features/memoSlice";
 import EmojiPicker from "../components/common/EmojiPicker";
 import { setFavoriteList } from "../redux/features/favoriteSlice";
+import { store } from "../redux/store";
 
 export const Memo = () => {
   const { memoId } = useParams();
@@ -31,6 +32,7 @@ export const Memo = () => {
         setTitle(res.title);
         setDescription(res.description);
         setIcon(res.icon);
+        setIsFavorite(res.favorite);
       } catch (err) {
         alert(err);
       }
@@ -48,6 +50,17 @@ export const Memo = () => {
     let temp = [...memos];
     const index = temp.findIndex((e) => e._id === memoId);
     temp[index] = { ...temp[index], title: newTitle };
+
+    if (isFavorite) {
+      let tempFavorite = [...favoriteMemos];
+      const favoriteIndex = tempFavorite.findIndex((e) => e.id === memoId);
+      tempFavorite[favoriteIndex] = {
+        ...tempFavorite[favoriteIndex],
+        title: newTitle,
+      };
+      dispatch(setFavoriteList(tempFavorite));
+    }
+
     dispatch(setMemo(temp));
 
     timer = setTimeout(async () => {
@@ -58,6 +71,7 @@ export const Memo = () => {
       }
     }, timeout);
   };
+
   const updateDescription = async (e) => {
     clearTimeout(timer);
     const newDescription = e.target.value;
@@ -70,6 +84,27 @@ export const Memo = () => {
         alert(err);
       }
     }, timeout);
+  };
+
+  const addFavorite = async () => {
+    try {
+      const memo = await memoApi.update(memoId, { favorite: !isFavorite });
+      // console.log("addFavorite-- update Memo", memo);
+      let newFavoriteMemos = [...favoriteMemos];
+      if (isFavorite) {
+        newFavoriteMemos = newFavoriteMemos.filter((e) => e.id !== memoId);
+        // console.log(newFavoriteMemos);
+      } else {
+        // !!!!!!
+        newFavoriteMemos.unshift(memo);
+      }
+      dispatch(setFavoriteList(newFavoriteMemos));
+      // console.log("Redux State:", store.getState());
+
+      setIsFavorite(!isFavorite);
+    } catch (err) {
+      alert(err);
+    }
   };
 
   const deleteMemo = async (e) => {
@@ -105,24 +140,6 @@ export const Memo = () => {
     dispatch(setMemo(temp));
     try {
       await memoApi.update(memoId, { icon: newIcon });
-    } catch (err) {
-      alert(err);
-    }
-  };
-
-  const addFavorite = async () => {
-    try {
-      const memo = await memoApi.update(memoId, { favorite: !isFavorite });
-      let newFavoriteMemos = [...favoriteMemos];
-      if (isFavorite) {
-        const newFavoriteMemos = newFavoriteMemos.filter(
-          (e) => e.id !== memoId
-        );
-      } else {
-        newFavoriteMemos.unshift(memo);
-      }
-      dispatch(setFavoriteList(newFavoriteMemos));
-      setIsFavorite(!isFavorite);
     } catch (err) {
       alert(err);
     }
