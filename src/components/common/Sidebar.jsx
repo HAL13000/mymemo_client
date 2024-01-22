@@ -24,11 +24,6 @@ export const Sidebar = () => {
   const { memoId } = useParams();
   const memos = useSelector((state) => state.memo.value);
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
-  };
-
   useEffect(() => {
     const getMemos = async () => {
       try {
@@ -43,12 +38,17 @@ export const Sidebar = () => {
 
   useEffect(() => {
     const activeIndex = memos.findIndex((e) => e.id === memoId);
-    // if (memos.length > 0 && memoId === undefined) {
-    // }
+    if (memos.length > 0 && memoId === undefined) {
+    }
     setActiveIndex(activeIndex);
   }, [memos, memoId, navigate]);
 
-  const createMemo = async (e) => {
+  const logout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
+  const createMemo = async () => {
     try {
       const res = await memoApi.create();
       // console.log(res);

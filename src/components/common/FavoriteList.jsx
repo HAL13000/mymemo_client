@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ListItemButton, Typography, Box } from "@mui/material";
-import { DragDropContext } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import memoApi from "../../api/memoApi";
@@ -17,8 +17,8 @@ const FavoriteList = () => {
     const getMemos = async () => {
       try {
         const res = await memoApi.getFavorites();
-        console.log("favorite list", res);
-        // dispatch(setFavoriteList(res));
+        // console.log("favorite list", res);
+        dispatch(setFavoriteList(res));
       } catch (err) {
         alert(err);
       }
@@ -28,9 +28,11 @@ const FavoriteList = () => {
 
   useEffect(() => {
     const index = memos.findIndex((e) => e._id === memoId);
-    console.log("favoriteList", memos);
+    // console.log("favoriteList", memos);
     setActiveIndex(index);
   }, [memoId]);
+
+  const handleOnDragEnd = () => {};
 
   return (
     <div>
@@ -48,6 +50,11 @@ const FavoriteList = () => {
           </Typography>
         </Box>
       </ListItemButton>
+      <DragDropContext onDragEnd={handleOnDragEnd}>
+        <Droppable>
+          <Draggable></Draggable>
+        </Droppable>
+      </DragDropContext>
       {memos.map((item, index) => (
         <ListItemButton
           to={`/memo/${item._id}`}
