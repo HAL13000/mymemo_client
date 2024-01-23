@@ -15,9 +15,10 @@ import { useDispatch, useSelector } from "react-redux";
 import memoApi from "../../api/memoApi";
 import { setMemo } from "../../redux/features/memoSlice";
 import FavoriteList from "./FavoriteList";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 export const Sidebar = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeItem, setActiveIndex] = useState(0);
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
@@ -59,6 +60,8 @@ export const Sidebar = () => {
       alert(err);
     }
   };
+
+  const onDragEnd = () => {};
 
   return (
     <div>
@@ -128,37 +131,65 @@ export const Sidebar = () => {
             </Box>
           </ListItemButton>
           <Box sx={{ paddingTop: "10px" }} />
-          {memos.map((item, index) => (
-            <ListItemButton
-              sx={{ pl: "20px" }}
-              component={Link}
-              to={`/memo/${item._id}`}
-              key={item._id}
-              selected={index === activeIndex}
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable
+              key={`list-memo-droppable`}
+              droppableId={`list-memo-droppable`}
             >
-              <Box
-              // sx={{ pl: "20px" }}
-              // component={Link}
-              // to={`/memo/${item._id}`}
-              // key={item._id}
-              // selected={index === activeIndex}
-              >
-                <Typography
-                  variant="body2"
-                  fontWeight="700"
-                  sx={{
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                  }}
-                >
-                  {item.icon}
-                  {item.title}
-                </Typography>
-                <IconButton></IconButton>
-              </Box>
-            </ListItemButton>
-          ))}
+              {(provided) => (
+                <div ref={provided.innerRef} {...provided.droppableProps}>
+                  {memos.map((item, index) => (
+                    <Draggable
+                      key={item._id}
+                      draggableId={item._id}
+                      index={index}
+                    >
+                      {(provided, snapshot) => (
+                        <ListItemButton
+                          ref={provided.innerRef}
+                          {...provided.dragHandleProps}
+                          {...provided.draggableProps}
+                          component={Link}
+                          sx={{
+                            pl: "20px",
+                            cursor: snapshot.isDragging
+                              ? "grab"
+                              : "pointer!important",
+                          }}
+                          component={Link}
+                          to={`/memo/${item._id}`}
+                          selected={index === activeItem}
+                        >
+                          <Box
+                          // sx={{ pl: "20px" }}
+                          // component={Link}
+                          // to={`/memo/${item._id}`}
+                          // key={item._id}
+                          // selected={index === activeIndex}
+                          >
+                            <Typography
+                              variant="body2"
+                              fontWeight="700"
+                              sx={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                              }}
+                            >
+                              {item.icon}
+                              {item.title}
+                            </Typography>
+                            <IconButton></IconButton>
+                          </Box>
+                        </ListItemButton>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
         </List>
       </Drawer>
     </div>
