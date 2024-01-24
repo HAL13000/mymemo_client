@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import memoApi from "../../api/memoApi";
 import { setFavoriteList } from "../../redux/features/favoriteSlice";
+import { CustomDroppable } from "./CustomDroppable";
 
 const FavoriteList = () => {
   const dispatch = useDispatch();
@@ -12,7 +13,7 @@ const FavoriteList = () => {
   const memos = useSelector((state) => state.favorites.value);
   const { memoId } = useParams();
   const [activeItem, setActiveIndex] = useState(0);
-  //   const [favorites, updateFavorites] = useState(FavoriteList);
+  //   const [favorites, updateFavorites] = useState(favoriteLis);
 
   useEffect(() => {
     const getMemos = async () => {
@@ -33,15 +34,17 @@ const FavoriteList = () => {
     setActiveIndex(index);
   }, [memoId]);
 
-  const handleOnDragEnd = () => {};
+  const handleOnDragEnd = (result) => {
+    console.log(result);
+  };
   //   function handleOnDragEnd(result) {
   //     if (!result.destination) return;
+  //     console.log(result, memos);
+  //     // const items = Array.from(${`list-memo-droppable`});
+  //     const reorderedItem = memos.splice(result.source.index, 1);
+  //     const newarray = reorderedItem.splice(result.destination.index, 0, result);
 
-  //     const items = Array.from(`list-memo-droppable`);
-  //     const [reorderedItem] = memos.splice(result.source.index, 1);
-  //     items.splice(result.destination.index, 0, reorderedItem);
-
-  //     updateFavorites(items);
+  //     setFavoriteList(newarray);
   //   }
 
   return (
@@ -60,8 +63,8 @@ const FavoriteList = () => {
           </Typography>
         </Box>
       </ListItemButton>
-      <DragDropContext onDragEnd={handleOnDragEnd}>
-        <Droppable
+      <DragDropContext onDragEnd={(result) => handleOnDragEnd(result)}>
+        <CustomDroppable
           key={`list-memo-droppable`}
           droppableId={`list-memo-droppable`}
         >
@@ -104,7 +107,7 @@ const FavoriteList = () => {
               {provided.placeholder}
             </div>
           )}
-        </Droppable>
+        </CustomDroppable>
       </DragDropContext>
     </div>
   );
