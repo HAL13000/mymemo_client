@@ -10,7 +10,7 @@ import { CustomDroppable } from "./CustomDroppable";
 const FavoriteList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const memos = useSelector((state) => state.favorites.value);
+  const favorites = useSelector((state) => state.favorites.value);
   const { memoId } = useParams();
   const [activeItem, setActiveIndex] = useState(0);
   //   const [favorites, updateFavorites] = useState(favoriteLis);
@@ -29,24 +29,33 @@ const FavoriteList = () => {
   }, []);
 
   useEffect(() => {
-    const index = memos.findIndex((e) => e._id === memoId);
+    const index = favorites.findIndex((e) => e._id === memoId);
     // console.log("favoriteList", memos);
     setActiveIndex(index);
   }, [memoId]);
 
-  const handleOnDragEnd = (result) => {
-    console.log(result);
-  };
-  //   function handleOnDragEnd(result) {
-  //     if (!result.destination) return;
-  //     console.log(result, memos);
-  //     // const items = Array.from(${`list-memo-droppable`});
-  //     const reorderedItem = memos.splice(result.source.index, 1);
-  //     const newarray = reorderedItem.splice(result.destination.index, 0, result);
+  function handleOnDragEnd(result) {
+    // If there's no destination ー> return
+    if (!result.destination) return;
+    // console.log(result, favorites);
 
-  //     setFavoriteList(newarray);
-  //   }
+    const reorderedItem = favorites[result.source.index];
+    const newFavorites = [...favorites];
+    newFavorites.splice(result.source.index);
+    console.log(result.source.index);
+    newFavorites.splice(result.destination.index, 0, {
+      ...reorderedItem,
+      favoritePosition: result.destination.index,
+    });
+    console.log(reorderedItem);
+    console.log(result.destination.index);
 
+    setFavoriteList([...favorites]);
+  }
+
+  // const reorderedItem = favorites.splice(result.source.index, 1);
+  // const newReorderedItem = { ...reorderedItem };
+  // favorites.splice(result.destination.index, 0, newReorderedItem);
   return (
     <div>
       <ListItemButton>
@@ -70,7 +79,7 @@ const FavoriteList = () => {
         >
           {(provided) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
-              {memos.map((item, index) => (
+              {favorites.map((item, index) => (
                 <Draggable key={item._id} draggableId={item._id} index={index}>
                   {(provided, snapshot) => (
                     <ListItemButton
