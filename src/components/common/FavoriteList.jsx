@@ -13,7 +13,6 @@ const FavoriteList = () => {
   const favorites = useSelector((state) => state.favorites.value);
   const { memoId } = useParams();
   const [activeItem, setActiveIndex] = useState(0);
-  //   const [favorites, updateFavorites] = useState(favoriteLis);
 
   useEffect(() => {
     const getMemos = async () => {
@@ -30,7 +29,7 @@ const FavoriteList = () => {
 
   useEffect(() => {
     const index = favorites.findIndex((e) => e._id === memoId);
-    // console.log("favoriteList", memos);
+    // console.log("favoriteList", favorites);
     setActiveIndex(index);
   }, [memoId]);
 
@@ -41,21 +40,35 @@ const FavoriteList = () => {
 
     const reorderedItem = favorites[result.source.index];
     const newFavorites = [...favorites];
-    newFavorites.splice(result.source.index);
-    console.log(result.source.index);
-    newFavorites.splice(result.destination.index, 0, {
-      ...reorderedItem,
-      favoritePosition: result.destination.index,
-    });
-    console.log(reorderedItem);
-    console.log(result.destination.index);
 
-    setFavoriteList([...favorites]);
+    const movedItem = newFavorites.find(
+      (entry) => entry._id === result.draggableId
+    );
+    console.log(favorites, result, movedItem);
+
+    newFavorites.splice(result.source.index, 1);
+    console.log(result.source.index);
+    newFavorites.splice(result.destination.index, 0, movedItem);
+
+    dispatch(setFavoriteList(newFavorites));
+
+    console.log(favorites, newFavorites);
+
+    for (let i = 0; i < newFavorites.length; i++) {
+      console.log(newFavorites[i], i);
+      memoApi
+        .update(newFavorites[i]._id, {
+          favoritePosition: i,
+        })
+        .then(() => {
+          console.log("success");
+        })
+        .catch((err) => {
+          console.log(err, "error");
+        });
+    }
   }
 
-  // const reorderedItem = favorites.splice(result.source.index, 1);
-  // const newReorderedItem = { ...reorderedItem };
-  // favorites.splice(result.destination.index, 0, newReorderedItem);
   return (
     <div>
       <ListItemButton>

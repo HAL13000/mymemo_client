@@ -62,7 +62,49 @@ export const Sidebar = () => {
     }
   };
 
-  const onDragEnd = () => {};
+  function handleOnDragEnd(result) {
+    // If there's no destination ー> return
+    if (!result.destination) return;
+    // console.log(result, favorites);
+
+    const reorderedItem = memos[result.source.index];
+    const newMemos = [...memos];
+
+    const movedItem = newMemos.find(
+      (entry) => entry._id === result.draggableId
+    );
+    console.log(memos, result, movedItem);
+
+    newMemos.splice(result.source.index, 1);
+    console.log(result.source.index);
+    newMemos.splice(result.destination.index, 0, movedItem);
+
+    dispatch(setMemo(newMemos));
+
+    console.log(memos, newMemos);
+
+    memoApi
+      .updatePosition(newMemos)
+      .then((res) => {
+        console.log("success", res);
+      })
+      .catch((err) => {
+        console.log(err, "error");
+      });
+    // for (let i = 0; i < newMemos.length; i++) {
+    //   console.log(newMemos[i], i);
+    //   memoApi
+    //     .update(newMemos[i]._id, {
+    //       position: i,
+    //     })
+    //     .then(() => {
+    //       console.log("success");
+    //     })
+    //     .catch((err) => {
+    //       console.log(err, "error");
+    //     });
+    // }
+  }
 
   return (
     <div>
@@ -118,7 +160,7 @@ export const Sidebar = () => {
             </Box>
           </ListItemButton>
           <Box sx={{ paddingTop: "10px" }} />
-          <DragDropContext onDragEnd={onDragEnd}>
+          <DragDropContext onDragEnd={handleOnDragEnd}>
             <CustomDroppable
               key={`list-memo-droppable`}
               droppableId={`list-memo-droppable`}
