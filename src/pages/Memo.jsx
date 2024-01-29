@@ -34,7 +34,12 @@ export const Memo = () => {
         setIcon(res.icon);
         setIsFavorite(res.favorite);
       } catch (err) {
-        alert(err);
+        if (err.message) {
+          alert(err.message);
+        } else {
+          alert("An error: Update memos");
+          console.log(err);
+        }
       }
     };
     getMemo();
@@ -67,7 +72,12 @@ export const Memo = () => {
       try {
         await memoApi.update(memoId, { title: newTitle });
       } catch (err) {
-        alert(err);
+        if (err.message) {
+          alert(err.message);
+        } else {
+          alert("An error: Update memos");
+          console.log(err);
+        }
       }
     }, timeout);
   };
@@ -81,7 +91,12 @@ export const Memo = () => {
       try {
         await memoApi.update(memoId, { description: newDescription });
       } catch (err) {
-        alert(err);
+        if (err.message) {
+          alert(err.message);
+        } else {
+          alert("An error: Update description");
+          console.log(err);
+        }
       }
     }, timeout);
   };
@@ -103,7 +118,13 @@ export const Memo = () => {
 
       setIsFavorite(!isFavorite);
     } catch (err) {
-      alert(err);
+      if (err.message) {
+        alert(err.message);
+      } else {
+        alert("An error: Add favorites");
+        console.log(err);
+      }
+      // alert(err);
     }
   };
 
@@ -125,7 +146,13 @@ export const Memo = () => {
       }
       dispatch(setMemo(newMemos));
     } catch (err) {
-      alert(err);
+      if (err.message) {
+        alert(err.message);
+      } else {
+        alert("An error: Delete memos");
+        console.log(err);
+      }
+      // alert(err);
     }
   };
 
@@ -141,7 +168,12 @@ export const Memo = () => {
     try {
       await memoApi.update(memoId, { icon: newIcon });
     } catch (err) {
-      alert(err);
+      if (err.message) {
+        alert(err.message);
+      } else {
+        alert("An error: Change Icons");
+        console.log(err);
+      }
     }
   };
 
@@ -186,11 +218,15 @@ export const Memo = () => {
             }}
           />
           <TextField
+            multiline
+            minRows={5}
+            maxRows={25}
             onChange={updateDescription}
             value={description}
             placeholder="Add"
             variant="outlined"
             fullWidth
+            minRows="5"
             sx={{
               ".MuiInputBase-input": { padding: 0 },
               ".MuiOutlinedInput-notchedOutline": { border: "none" },
