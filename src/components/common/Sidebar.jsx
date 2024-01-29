@@ -28,6 +28,10 @@ export const Sidebar = () => {
 
   useEffect(() => {
     const getMemos = async () => {
+      // console.log(user);
+      if (!user._id) {
+        return;
+      }
       try {
         const res = await memoApi.getAll();
         dispatch(setMemo(res));
@@ -42,7 +46,7 @@ export const Sidebar = () => {
       }
     };
     getMemos();
-  }, [dispatch]);
+  }, [dispatch, user]);
 
   useEffect(() => {
     const activeIndex = memos.findIndex((e) => e.id === memoId);

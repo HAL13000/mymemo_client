@@ -11,11 +11,15 @@ const FavoriteList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const favorites = useSelector((state) => state.favorites.value);
+  const user = useSelector((state) => state.user.value);
   const { memoId } = useParams();
   const [activeItem, setActiveIndex] = useState(0);
 
   useEffect(() => {
     const getMemos = async () => {
+      if (!user._id) {
+        return;
+      }
       try {
         const res = await memoApi.getFavorites();
         // console.log("favorite list", res);
@@ -31,7 +35,7 @@ const FavoriteList = () => {
       }
     };
     getMemos();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     const index = favorites.findIndex((e) => e._id === memoId);

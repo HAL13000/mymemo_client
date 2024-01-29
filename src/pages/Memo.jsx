@@ -107,8 +107,8 @@ export const Memo = () => {
       // console.log("addFavorite-- update Memo", memo);
       let newFavoriteMemos = [...favoriteMemos];
       if (isFavorite) {
-        newFavoriteMemos = newFavoriteMemos.filter((e) => e.id !== memoId);
-        // console.log(newFavoriteMemos);
+        newFavoriteMemos = newFavoriteMemos.filter((e) => e._id !== memoId);
+        console.log(newFavoriteMemos);
       } else {
         // !!!!!!
         newFavoriteMemos.unshift(memo);
