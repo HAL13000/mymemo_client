@@ -21,7 +21,13 @@ const FavoriteList = () => {
         // console.log("favorite list", res);
         dispatch(setFavoriteList(res));
       } catch (err) {
-        alert(err);
+        if (err.message) {
+          alert(err.message);
+        } else {
+          alert("An error: Get memos");
+          console.log(err);
+        }
+        // alert(err);
       }
     };
     getMemos();

@@ -32,7 +32,13 @@ export const Sidebar = () => {
         const res = await memoApi.getAll();
         dispatch(setMemo(res));
       } catch (err) {
-        alert(err);
+        if (err.message) {
+          alert(err.message);
+        } else {
+          alert("An error: Get memos at sidebar");
+          console.log(err);
+        }
+        // alert(err);
       }
     };
     getMemos();
@@ -58,7 +64,13 @@ export const Sidebar = () => {
       const newMemos = [res, ...memos];
       dispatch(setMemo(newMemos));
     } catch (err) {
-      alert(err);
+      if (err.message) {
+        alert(err.message);
+      } else {
+        alert("An error: Create memos at sidebar");
+        console.log(err);
+      }
+      // alert(err);
     }
   };
 

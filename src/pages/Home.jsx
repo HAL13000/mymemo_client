@@ -21,7 +21,13 @@ export const Home = () => {
       dispatch(setMemo(newMemos));
       // !
     } catch (err) {
-      alert(err);
+      // alert(err);
+      if (err.message) {
+        alert(err.message);
+      } else {
+        alert("An error: Create memos");
+        console.log(err);
+      }
     } finally {
       setLoading(false);
     }
