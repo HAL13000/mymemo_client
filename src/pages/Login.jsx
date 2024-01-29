@@ -4,12 +4,15 @@ import { Box, TextField, ButtonBase } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { Link, useNavigate } from "react-router-dom";
 import authApi from "../api/authApi";
+import { useDispatch } from "react-redux";
+import { setUser } from "../redux/features/userSlice";
 
 const Login = () => {
   const [usernameErrText, setUserNameErrText] = useState("");
   const [passwordErrText, setPasswordErrText] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,6 +57,7 @@ const Login = () => {
       setLoading(false);
       localStorage.setItem("token", res.token);
       // res.tokenは　server　>　user.js　>　register で設定したres.tokenのこと
+      dispatch(setUser(res.user));
       console.log("Log in succeeded!");
       navigate("/");
     } catch (err) {
