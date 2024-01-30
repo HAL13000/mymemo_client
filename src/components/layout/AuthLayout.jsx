@@ -1,7 +1,7 @@
 import { Box, Container } from "@mui/material";
 import React, { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import notionLogo from "../../assets/images/notion-logo.png";
+import memoLogo from "../../assets/images/memo-logo.png";
 import authUtils from "../../utils/authUtils";
 
 export const AuthLayout = () => {
@@ -32,11 +32,11 @@ export const AuthLayout = () => {
           }}
         >
           <img
-            src={notionLogo}
+            src={memoLogo}
             alt=""
             style={{ width: 100, height: 100, marginBottom: 3 }}
           />
-          <h1>Notion Clone</h1>
+          <h1>My Memo</h1>
         </Box>
         <Outlet />
       </Container>
