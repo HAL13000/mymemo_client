@@ -8,7 +8,7 @@ import memoApi from "../api/memoApi";
 import { useDispatch, useSelector } from "react-redux";
 import { setMemo } from "../redux/features/memoSlice";
 import EmojiPicker from "../components/common/EmojiPicker";
-import { setFavoriteList } from "../redux/features/favoriteSlice";
+// import { setFavoriteList } from "../redux/features/favoriteSlice";
 import { store } from "../redux/store";
 
 export const Memo = () => {
@@ -19,7 +19,7 @@ export const Memo = () => {
   const [icon, setIcon] = useState("");
   const dispatch = useDispatch();
   const memos = useSelector((state) => state.memo.value);
-  const favoriteMemos = useSelector((state) => state.favorites.value);
+  const favoriteMemos = memos.filter((memo) => memo.favorite === true);
   const Navigate = useNavigate();
 
   // useStateでメモの状態を更新する　Const updateMemo もいる
@@ -56,15 +56,15 @@ export const Memo = () => {
     const index = temp.findIndex((e) => e._id === memoId);
     temp[index] = { ...temp[index], title: newTitle };
 
-    if (isFavorite) {
-      let tempFavorite = [...favoriteMemos];
-      const favoriteIndex = tempFavorite.findIndex((e) => e.id === memoId);
-      tempFavorite[favoriteIndex] = {
-        ...tempFavorite[favoriteIndex],
-        title: newTitle,
-      };
-      dispatch(setFavoriteList(tempFavorite));
-    }
+    // if (isFavorite) {
+    //   let tempFavorite = [...favoriteMemos];
+    //   const favoriteIndex = tempFavorite.findIndex((e) => e.id === memoId);
+    //   tempFavorite[favoriteIndex] = {
+    //     ...tempFavorite[favoriteIndex],
+    //     title: newTitle,
+    //   };
+    //   dispatch(setFavoriteList(tempFavorite));
+    // }
 
     dispatch(setMemo(temp));
 
@@ -108,12 +108,13 @@ export const Memo = () => {
       let newFavoriteMemos = [...favoriteMemos];
       if (isFavorite) {
         newFavoriteMemos = newFavoriteMemos.filter((e) => e._id !== memoId);
-        console.log(newFavoriteMemos);
+        // console.log(newFavoriteMemos);
       } else {
         // !!!!!!
         newFavoriteMemos.unshift(memo);
       }
-      dispatch(setFavoriteList(newFavoriteMemos));
+      dispatch(setMemo(newFavoriteMemos));
+      // dispatch(setFavoriteList(newFavoriteMemos));
       // console.log("Redux State:", store.getState());
 
       setIsFavorite(!isFavorite);
@@ -135,7 +136,8 @@ export const Memo = () => {
 
       if (isFavorite) {
         const newFavoriteMemos = favoriteMemos.filter((e) => e._id !== memoId);
-        dispatch(setFavoriteList(newFavoriteMemos));
+        dispatch(setMemo(newFavoriteMemos));
+        // dispatch(setFavoriteList(newFavoriteMemos));
       }
 
       const newMemos = memos.filter((e) => e._id !== memoId);

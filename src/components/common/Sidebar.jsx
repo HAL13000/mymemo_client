@@ -89,7 +89,7 @@ export const Sidebar = () => {
     const movedItem = newMemos.find(
       (entry) => entry._id === result.draggableId
     );
-    console.log(memos, result, movedItem);
+    // console.log(memos, result, movedItem);
 
     newMemos.splice(result.source.index, 1);
     console.log(result.source.index);
@@ -97,7 +97,7 @@ export const Sidebar = () => {
 
     dispatch(setMemo(newMemos));
 
-    console.log(memos, newMemos);
+    // console.log(memos, newMemos);
 
     memoApi
       .updatePosition(newMemos)
@@ -234,87 +234,9 @@ export const Sidebar = () => {
                 </div>
               )}
             </CustomDroppable>
-          </DragDropContext>{" "}
+          </DragDropContext>
         </List>
       </Drawer>
     </div>
   );
 };
-
-{
-  /* <ListItemButton>
-            <Box
-              sx={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography variant="body2" fontWeight="700">
-                Favorite
-              </Typography>
-            </Box>
-          </ListItemButton> */
-}
-{
-  /* <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable
-              key={`list-memo-droppable`}
-              droppableId={`list-memo-droppable`}
-            >
-              {(provided) => (
-                <div ref={provided.innerRef} {...provided.droppableProps}>
-                  {memos.map((item, index) => (
-                    <Draggable
-                      key={item._id}
-                      draggableId={item._id}
-                      index={index}
-                    >
-                      {(provided, snapshot) => (
-                        <ListItemButton
-                          ref={provided.innerRef}
-                          {...provided.dragHandleProps}
-                          {...provided.draggableProps}
-                          component={Link}
-                          sx={{
-                            pl: "20px",
-                            cursor: snapshot.isDragging
-                              ? "grab"
-                              : "pointer!important",
-                          }}
-                          component={Link}
-                          to={`/memo/${item._id}`}
-                          selected={index === activeItem}
-                        >
-                          <Box
-                          // sx={{ pl: "20px" }}
-                          // component={Link}
-                          // to={`/memo/${item._id}`}
-                          // key={item._id}
-                          // selected={index === activeIndex}
-                          >
-                            <Typography
-                              variant="body2"
-                              fontWeight="700"
-                              sx={{
-                                whiteSpace: "nowrap",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                              }}
-                            >
-                              {item.icon}
-                              {item.title}
-                            </Typography>
-                            <IconButton></IconButton>
-                          </Box>
-                        </ListItemButton>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext> */
-}
