@@ -17,6 +17,7 @@ import { setMemo } from "../../redux/features/memoSlice";
 import FavoriteList from "./FavoriteList";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { CustomDroppable } from "./CustomDroppable";
+import { red } from "@mui/material/colors";
 
 export const Sidebar = () => {
   const [activeItem, setActiveIndex] = useState(0);
@@ -128,7 +129,13 @@ export const Sidebar = () => {
         container={window.document.body}
         variant="permanent"
         open={true}
-        sx={{ width: 250, height: "100vh" }}
+        sx={{
+          width: 250,
+          height: "100vh",
+          "@media (max-width: 600px)": {
+            width: 100,
+          },
+        }}
       >
         <List
           disablePadding
@@ -136,6 +143,9 @@ export const Sidebar = () => {
             width: 250,
             height: "100vh",
             backgroundColor: assets.colors.secondary,
+            "@media (max-width: 600px)": {
+              width: 100,
+            },
           }}
         >
           <ListItemButton>
@@ -147,11 +157,26 @@ export const Sidebar = () => {
                 justifyContent: "space-between",
               }}
             >
-              <Typography variant="body2" fontWeight="700">
+              <Typography
+                variant="body2"
+                fontWeight="700"
+                sx={{
+                  "@media (max-width: 600px)": {
+                    display: "none",
+                  },
+                }}
+              >
                 {user.username}
               </Typography>
               <IconButton onClick={logout}>
-                <LogoutOutlinedIcon fontSize="small" />
+                <LogoutOutlinedIcon
+                  fontSize="small"
+                  sx={{
+                    "@media (max-width: 600px)": {
+                      position: "absolute",
+                    },
+                  }}
+                />
               </IconButton>
             </Box>
           </ListItemButton>
@@ -167,11 +192,26 @@ export const Sidebar = () => {
                 justifyContent: "space-between",
               }}
             >
-              <Typography variant="body2" fontWeight="700">
+              <Typography
+                variant="body2"
+                fontWeight="700"
+                sx={{
+                  "@media (max-width: 600px)": {
+                    display: "none",
+                  },
+                }}
+              >
                 Private
               </Typography>
               <IconButton onClick={() => createMemo()}>
-                <AddBoxOutlinedIcon fontSize="small" />
+                <AddBoxOutlinedIcon
+                  fontSize="small"
+                  sx={{
+                    "@media (max-width: 600px)": {
+                      position: "absolute",
+                    },
+                  }}
+                />
               </IconButton>
             </Box>
           </ListItemButton>
@@ -206,11 +246,11 @@ export const Sidebar = () => {
                           selected={index === activeItem}
                         >
                           <Box
-                          // sx={{ pl: "20px" }}
-                          // component={Link}
-                          // to={`/memo/${item._id}`}
-                          // key={item._id}
-                          // selected={index === activeIndex}
+                            sx={{
+                              "@media (max-width: 600px)": {
+                                overflow: "hidden",
+                              },
+                            }}
                           >
                             <Typography
                               variant="body2"

@@ -201,7 +201,14 @@ export const Memo = () => {
 
         <Typography></Typography>
       </Box>
-      <Box sx={{ padding: "10px 50px" }}>
+      <Box
+        sx={{
+          padding: "10px 50px",
+          "@media (max-width: 600px)": {
+            padding: "10px 15px",
+          },
+        }}
+      >
         <Box>
           <EmojiPicker icon={icon} onChange={onIconChange} />
           <TextField
@@ -216,6 +223,12 @@ export const Memo = () => {
               ".MuiOutlinedInput-root": {
                 fontSize: "2rem",
                 fontWeight: "700",
+              },
+              "@media (max-width: 600px)": {
+                ".MuiOutlinedInput-root": {
+                  fontSize: "1.5rem",
+                  fontWeight: "700",
+                },
               },
             }}
           />
@@ -234,6 +247,11 @@ export const Memo = () => {
               ".MuiOutlinedInput-notchedOutline": { border: "none" },
               ".MuiOutlinedInput-root": {
                 fontSize: "1rem",
+              },
+              "@media (max-width: 600px)": {
+                ".MuiOutlinedInput-root": {
+                  fontSize: "0.8rem",
+                },
               },
             }}
           />
