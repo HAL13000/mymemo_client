@@ -56,16 +56,6 @@ export const Memo = () => {
     const index = temp.findIndex((e) => e._id === memoId);
     temp[index] = { ...temp[index], title: newTitle };
 
-    // if (isFavorite) {
-    //   let tempFavorite = [...favoriteMemos];
-    //   const favoriteIndex = tempFavorite.findIndex((e) => e.id === memoId);
-    //   tempFavorite[favoriteIndex] = {
-    //     ...tempFavorite[favoriteIndex],
-    //     title: newTitle,
-    //   };
-    //   dispatch(setFavoriteList(tempFavorite));
-    // }
-
     dispatch(setMemo(temp));
 
     timer = setTimeout(async () => {
@@ -101,23 +91,23 @@ export const Memo = () => {
     }, timeout);
   };
 
-  const addFavorite = async () => {
+  const addFavorite = async (e) => {
+    let newFavoriteMemos = [...memos];
+
     try {
       const memo = await memoApi.update(memoId, { favorite: !isFavorite });
-      // console.log("addFavorite-- update Memo", memo);
-      let newFavoriteMemos = [...favoriteMemos];
       if (isFavorite) {
-        newFavoriteMemos = newFavoriteMemos.filter((e) => e._id !== memoId);
-        // console.log(newFavoriteMemos);
+        newFavoriteMemos = newFavoriteMemos.map((memo) =>
+          memo._id === memoId ? { ...memo, favorite: false } : memo
+        );
       } else {
-        // !!!!!!
-        newFavoriteMemos.unshift(memo);
+        newFavoriteMemos = newFavoriteMemos.map((memo) =>
+          memo._id === memoId ? { ...memo, favorite: true } : memo
+        );
       }
-      dispatch(setMemo(newFavoriteMemos));
-      // dispatch(setFavoriteList(newFavoriteMemos));
-      // console.log("Redux State:", store.getState());
 
       setIsFavorite(!isFavorite);
+      dispatch(setMemo(newFavoriteMemos));
     } catch (err) {
       if (err.message) {
         alert(err.message);
@@ -125,9 +115,39 @@ export const Memo = () => {
         alert("An error: Add favorites");
         console.log(err);
       }
-      // alert(err);
     }
   };
+  // const addFavorite = async () => {
+  //   try {
+  //     const memo = await memoApi.update(memoId, { favorite: !isFavorite });
+  //     // console.log("addFavorite-- update Memo", memo);
+  //     let newFavoriteMemos = [...favoriteMemos];
+  //     // console.log(isFavorite);
+
+  //       if (isFavorite) {
+  //         const index = newFavoriteMemos.find((e) => e._id === memoId);
+  //         newFavoriteMemos[index] = {
+  //           ...newFavoriteMemos[index],
+  //           // favorite: false,
+  //         };
+
+  //       console.log(newFavoriteMemos.find((e) => e._id === memoId));
+  //     } else {
+  //       newFavoriteMemos.unshift(memo);
+  //     }
+  //     console.log(newFavoriteMemos);
+  //     dispatch(setMemo(newFavoriteMemos));
+  //     // dispatch(setFavoriteList(newFavoriteMemos));
+  //     setIsFavorite(!isFavorite);
+  //   } catch (err) {
+  //     if (err.message) {
+  //       alert(err.message);
+  //     } else {
+  //       alert("An error: Add favorites");
+  //       console.log(err);
+  //     }
+  //   }
+  // };
 
   const deleteMemo = async (e) => {
     try {
