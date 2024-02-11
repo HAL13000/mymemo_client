@@ -16,28 +16,6 @@ const FavoriteList = () => {
   const { memoId } = useParams();
   const [activeItem, setActiveIndex] = useState(0);
 
-  // useEffect(() => {
-  //   const getMemos = async () => {
-  //     if (!user._id) {
-  //       return;
-  //     }
-  //     try {
-  //       const res = await memoApi.getFavorites();
-  //       // console.log("favorite list", res);
-  //       dispatch(setFavoriteList(res));
-  //     } catch (err) {
-  //       if (err.message) {
-  //         alert(err.message);
-  //       } else {
-  //         alert("An error: Get memos");
-  //         console.log(err);
-  //       }
-  //       // alert(err);
-  //     }
-  //   };
-  //   getMemos();
-  // }, [user]);
-
   useEffect(() => {
     const index = memos.findIndex((e) => e._id === memoId);
     // console.log("favoriteList", favorites);
@@ -154,3 +132,25 @@ const FavoriteList = () => {
 };
 
 export default FavoriteList;
+
+// useEffect(() => {
+//   const getMemos = async () => {
+//     if (!user._id) {
+//       return;
+//     }
+//     try {
+//       const res = await memoApi.getFavorites();
+//       // console.log("favorite list", res);
+//       dispatch(setFavoriteList(res));
+//     } catch (err) {
+//       if (err.message) {
+//         alert(err.message);
+//       } else {
+//         alert("An error: Get memos");
+//         console.log(err);
+//       }
+//       // alert(err);
+//     }
+//   };
+//   getMemos();
+// }, [user]);
