@@ -108,19 +108,6 @@ export const Sidebar = () => {
       .catch((err) => {
         console.log(err, "error");
       });
-    // for (let i = 0; i < newMemos.length; i++) {
-    //   console.log(newMemos[i], i);
-    //   memoApi
-    //     .update(newMemos[i]._id, {
-    //       position: i,
-    //     })
-    //     .then(() => {
-    //       console.log("success");
-    //     })
-    //     .catch((err) => {
-    //       console.log(err, "error");
-    //     });
-    // }
   }
 
   return (

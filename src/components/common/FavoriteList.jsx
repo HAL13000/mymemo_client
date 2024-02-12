@@ -15,33 +15,30 @@ const FavoriteList = () => {
   const user = useSelector((state) => state.user.value);
   const { memoId } = useParams();
   const [activeItem, setActiveIndex] = useState(0);
+  const favoriteMemos = memos.filter((memo) => memo.favorite === true);
 
   useEffect(() => {
     const index = memos.findIndex((e) => e._id === memoId);
-    // console.log("favoriteList", favorites);
     setActiveIndex(index);
   }, [memoId]);
 
   function handleOnDragEnd(result) {
     // If there's no destination ー> return
     if (!result.destination) return;
-    // console.log(result, favorites);
 
     const reorderedItem = memos[result.source.index];
-    const newFavorites = [...memos];
+
+    const newFavorites = [...favoriteMemos];
 
     const movedItem = newFavorites.find(
       (entry) => entry._id === result.draggableId
     );
-    // console.log(favorites, result, movedItem);
 
     newFavorites.splice(result.source.index, 1);
-    // console.log(result.source.index);
     newFavorites.splice(result.destination.index, 0, movedItem);
 
+    // メモ全体を操作するのではなくて、Favorite Listを操作するに変える必要あるかな？
     dispatch(setMemo(newFavorites));
-    // dispatch(setFavoriteList(newFavorites));
-    // console.log(favorites, newFavorites);
 
     for (let i = 0; i < newFavorites.length; i++) {
       // console.log(newFavorites[i], i);
@@ -104,7 +101,6 @@ const FavoriteList = () => {
                               ? "grab"
                               : "pointer!important",
                           }}
-                          //   onClick={() => console.log(item._id)}
                         >
                           <Typography
                             variant="body2"

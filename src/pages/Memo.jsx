@@ -117,37 +117,6 @@ export const Memo = () => {
       }
     }
   };
-  // const addFavorite = async () => {
-  //   try {
-  //     const memo = await memoApi.update(memoId, { favorite: !isFavorite });
-  //     // console.log("addFavorite-- update Memo", memo);
-  //     let newFavoriteMemos = [...favoriteMemos];
-  //     // console.log(isFavorite);
-
-  //       if (isFavorite) {
-  //         const index = newFavoriteMemos.find((e) => e._id === memoId);
-  //         newFavoriteMemos[index] = {
-  //           ...newFavoriteMemos[index],
-  //           // favorite: false,
-  //         };
-
-  //       console.log(newFavoriteMemos.find((e) => e._id === memoId));
-  //     } else {
-  //       newFavoriteMemos.unshift(memo);
-  //     }
-  //     console.log(newFavoriteMemos);
-  //     dispatch(setMemo(newFavoriteMemos));
-  //     // dispatch(setFavoriteList(newFavoriteMemos));
-  //     setIsFavorite(!isFavorite);
-  //   } catch (err) {
-  //     if (err.message) {
-  //       alert(err.message);
-  //     } else {
-  //       alert("An error: Add favorites");
-  //       console.log(err);
-  //     }
-  //   }
-  // };
 
   const deleteMemo = async (e) => {
     try {
