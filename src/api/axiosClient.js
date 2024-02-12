@@ -1,8 +1,8 @@
 import axios from "axios";
 
-// const BASE_URL = "http://localhost:3001/api/v1";
+const BASE_URL = "http://localhost:3001/api/v1";
 // const BASE_URL = process.env.API_URL;
-const BASE_URL = "https://mymemo-server.vercel.app/api/v1";
+// const BASE_URL = "https://mymemo-server.vercel.app/api/v1";
 
 const getToken = () => localStorage.getItem("token");
 const axiosClient = axios.create({
