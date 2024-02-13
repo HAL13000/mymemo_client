@@ -28,7 +28,7 @@ const FavoriteList = () => {
 
     const reorderedItem = memos[result.source.index];
 
-    const newFavorites = [...favoriteMemos];
+    const newFavorites = [...memos];
 
     const movedItem = newFavorites.find(
       (entry) => entry._id === result.draggableId
